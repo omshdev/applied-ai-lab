@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.6.3"}
+{"root":["./src/1.zero_shot.ts","./src/2.few_shot.ts","./src/client.ts","./src/index.ts"],"version":"5.6.3"}
