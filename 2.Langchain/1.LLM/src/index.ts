@@ -1,9 +1,15 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatPromptTemplate } from "@langchain/core/prompts"
 import dotenv from "dotenv"
-import { SystemMessage,HumanMessage } from "@langchain/core/messages";
-
-
 dotenv.config();
+
+
+
+const SYSTEM_TEMPLATE = `
+Your're an Reaserch Paper Analyzer. User Will give you {research_paper_input} , {style_input} , {length_input}. You have to provide response based on these Given Topics.
+`
+
+
 
 const model = new ChatGoogleGenerativeAI({
     apiKey : process.env.GOOGLE_API_KEY,
@@ -11,14 +17,18 @@ const model = new ChatGoogleGenerativeAI({
     temperature : 0
 });
 
-
-const messages = [
-    new SystemMessage("You're an Language Translator. People Will Give You Input in English Language You will Translate it to Hindi."),
-    new HumanMessage("Hi")
-]
-
+const promptTemplate = ChatPromptTemplate.fromMessages([
+    ["system",SYSTEM_TEMPLATE],["user"," {research_paper_input},{style_input} , {length_input}"]
+    
+])
 async function chat(){
-    const resposne= await model.invoke(messages); 
-    console.log(resposne.content);
+    const d = await promptTemplate.invoke({
+        research_paper_input : "The attention all You Need, Trasnformers Architecuture.",
+        style_input : "Research Heavy",
+        length_input : "Short"
+    });
+    console.log(d);
+    const response = await model.invoke(d);
+    console.log(response.content);
 }
 chat()
