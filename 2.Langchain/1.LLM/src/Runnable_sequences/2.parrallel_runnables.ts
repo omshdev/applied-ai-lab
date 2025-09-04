@@ -2,34 +2,9 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai"
 import { StringOutputParser } from "@langchain/core/output_parsers"
 import { RunnableParallel } from "@langchain/core/runnables"
+
 import dotenv from "dotenv";
-
-/*
-```
-      +-------+
-      | topic |
-      +-------+
-      /       \
-     /         \
-Notes           Quiz
-   /             \
-  v               v
-+-----+         +-----+
-| LLM1 |         | LLM2 |
-+-----+         +-----+
-  \             /
-   \           /
-    \         /
-     v       v
-   +-----------+
-   | Notes + Quiz |
-   |    LLM    |
-   +-----------+
-```
-
-
-
-*/
+import { merge } from "zod/v4/core/util";
 dotenv.config();
 
 
