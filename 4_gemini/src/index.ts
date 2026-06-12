@@ -5,55 +5,32 @@ dotenv.config();
 
 const ai = new GoogleGenAI({apiKey : process.env.GOOGLE_GEMINI_API_KEY!});
 
-// async function runTextGenerationAndStreamResponse(){
-//     // Generate Text
-//     // const response = await ai.models.generateContent({
-//     //     model : "gemini-3.5-flash",
-//     //     contents : " Who is Andrej Karpathy..",
-//     // });
-
-//     // console.log(response.text);
-
-//     // stream response for faster.
-//     const responseStream = await ai.models.generateContentStream({
-//         model : "gemini-3.5-flash",
-//         contents : "Who is Andrej Karpathy ?"
-//     });
-
-//     for await (const chunk of responseStream){
-//         // @ts-ignore
-//         process.stdout.write(chunk?.text);
-//     }
-// }
-// runTextGenerationAndStreamResponse();
-
-async function main(){
-    const response = await ai.models.generateContent({
-        model : "gemini-3.5-flash",
-        contents : [
-                "What is the sum of the first 50 prime numbers? " +
-      "Generate and run code for the calculation, and make sure you get all 50.",
-        ],
-        config:{
-            tools : [{codeExecution:{}}],
-        }
+async function modelResponse(prompt : string,SYSTEM_PROMPT:any){
+  const response = await ai.models.generateContentStream({
+      model : "gemini-2.5-flash",
+      contents : [prompt], // always user's prompt
+      config : {  // the config section where you provide system prompt.
+        systemInstruction : SYSTEM_PROMPT
+      }
     });
-    
-    const parts = response?.candidates?.[0]?.content?.parts || [];
-        
-    parts.forEach((part) => {
-        if (part.text) {
-        console.log(part.text);
+
+    let str = "";
+    for await (const chunk of response){
+      // @ts-ignore
+      process.stdout.write(chunk.text);
+      str+=chunk.text;
     }
+}
+// prompting techniques.
 
-  if (part.executableCode && part.executableCode.code) {
-    console.log(part.executableCode.code);
-  }
+// 1.zero shot prompting : where you cannot give any examples or instruction just stratight forward prompts and the model
+// will response based on your prompts , it's pretrained data based on that it will give you answer....
+async function zeroShotPrompting(prompt : string){
+    const response = await modelResponse(prompt,"");
+    return response;
+}
 
-  if (part.codeExecutionResult && part.codeExecutionResult.output) {
-    console.log(part.codeExecutionResult.output);
-  }
-    
-})}
 
-main()
+const answerZeroShotPrompting = await zeroShotPrompting("Translate to French: Hello, how are you?"); // here we didn't gave any example just raw question..
+
+console.log("ZSP",answerZeroShotPrompting);
