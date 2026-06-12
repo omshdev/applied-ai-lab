@@ -17,9 +17,10 @@ async function modelResponse(prompt : string,SYSTEM_PROMPT:any){
     let str = "";
     for await (const chunk of response){
       // @ts-ignore
-      process.stdout.write(chunk.text);
+      // process.stdout.write(chunk.text);
       str+=chunk.text;
     }
+    return str;
 }
 // prompting techniques.
 
@@ -29,8 +30,34 @@ async function zeroShotPrompting(prompt : string){
     const response = await modelResponse(prompt,"");
     return response;
 }
-
-
 const answerZeroShotPrompting = await zeroShotPrompting("Translate to French: Hello, how are you?"); // here we didn't gave any example just raw question..
+// console.log("ZSP",answerZeroShotPrompting);
 
-console.log("ZSP",answerZeroShotPrompting);
+// 2. Few Shot Prompting : where you give few examples before asking actual questions and here where
+// we understand system_prompt here you gave examples in system_prompt.
+// .ex let's take 
+// sentimental analysis. 
+// Text: I love this product.
+// Sentiment: Positive
+
+// Text: Worst experience ever.
+// Sentiment: Negative
+
+// Text: Delivery was fast and packaging was good.
+// Sentiment:
+
+async function fewShotPrompting(prompt:string){
+  const SYSTEM_PROMPT =  `sentimental analysis. 
+    Text: I love this product.
+    Sentiment: Positive
+
+    Text: Worst experience ever.
+    Sentiment: Negative
+  `
+
+  const response = await modelResponse(prompt,SYSTEM_PROMPT);
+  return response;
+}
+
+const answerFewShotPrompting = await fewShotPrompting("Text: Delivery was fast and packaging was good. Sentiment:");
+console.log("FSP",answerFewShotPrompting);
