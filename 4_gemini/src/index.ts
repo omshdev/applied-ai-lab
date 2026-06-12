@@ -7,7 +7,8 @@ const ai = new GoogleGenAI({apiKey : process.env.GOOGLE_GEMINI_API_KEY!});
 
 async function modelResponse(prompt : string,SYSTEM_PROMPT:any){
   const response = await ai.models.generateContentStream({
-      model : "gemini-2.5-flash",
+      // model : "gemini-2.5-flash",
+      model:"gemini-3.5-flash",
       contents : [prompt], // always user's prompt
       config : {  // the config section where you provide system prompt.
         systemInstruction : SYSTEM_PROMPT
@@ -73,10 +74,10 @@ async function roleOrPersonaPrompting(prompt:string){
 }
 
 const answerRoleOrPersonalPrompting = await roleOrPersonaPrompting("Explain Redis? ");
-console.log("Without role : 🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡")
-console.log("Without Role ",answerRoleOrPersonalPrompting);
-console.log("With Role💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀")
-console.log("With Role💀💀💀💀💀💀💀💀💀💀💀💀",answerRoleOrPersonalPrompting);
+// console.log("Without role : 🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡")
+// console.log("Without Role ",answerRoleOrPersonalPrompting);
+// console.log("With Role💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀")
+// console.log("With Role💀💀💀💀💀💀💀💀💀💀💀💀",answerRoleOrPersonalPrompting);
 
 // logs : ◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
 // Without role : 🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡🤡
@@ -89,6 +90,15 @@ console.log("With Role💀💀💀💀💀💀💀💀💀💀💀💀",answerRo
 // At its core, **Redis (Remote Dictionary Server)** is an open-source, in-memory data structure store that can be used as a database, cache, and message broker. It's renowned for its blazing fast performance, rich set of data structures, and robust feature set for high availability and distributed scaling.
 
 // ### Key Characteristics & Architectural Differentiators:
+// 1.  **In-Memory Operation (Primary Store):**  *   **Performance:** This is Redis's biggest advantage. By operating primarily on data in RAM, it achieves incredibly low latency (sub-millisecond) and high throughput (hundreds of thousands of op 
 
-// 1.  **In-Memory Operation (Primary Store):**
-//     *   **Performance:** This is Redis's biggest advantage. By operating primarily on data in RAM, it achieves incredibly low latency (sub-millisecond) and high throughput (hundreds of thousands of op 
+// 4. Chain-of-Thought (CoT) : Here we ask the model to reason step by step , for ex :  John has 5 apples.He buys 3 more.Then gives away 2. How many apples remain? , without cot it may occasionaly fail..
+
+async function chainOfThought(prompt : string){
+  const SYSTEM_PROMPT = "Think step by step.";
+  const response = await modelResponse(prompt,SYSTEM_PROMPT);
+  return response
+};
+
+const cot = await  chainOfThought("Plan a trip.");
+console.log("COT",cot);
