@@ -77,7 +77,7 @@ router.post("/interview-questions",async(req:Request,res:Response)=>{
     }
 });
 
-// Chain of Thought.
+// Chain of Thought. 
 router.post("/evaluate",async(req:Request,res:Response)=>{
     try{
         const system_prompt = `Evaluate this answer.Think step by step.
@@ -94,4 +94,6 @@ router.post("/evaluate",async(req:Request,res:Response)=>{
         return;
     }
 });
+
+
 export default router;
