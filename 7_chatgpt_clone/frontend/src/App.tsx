@@ -1,120 +1,70 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [prompt,setPrompt] = useState("");
+    const [answer,setAnswer]  = useState("");
+
+    async function handleChat(){
+      const response = await fetch(`http://localhost:3000/api/v1/ai/chat`,{
+        method : "POST",
+         headers: {
+      "Content-Type": "application/json",
+    },
+        body : JSON.stringify({ prompt})
+      });
+      console.log(response);
+      // response.body?.getReader()
+      
+      const reader = response.body?.getReader();
+      if(!reader) return;
+
+      const decoder = new TextDecoder();
+
+      let fullText = "";
+
+      while(true){
+        const { done ,value} = await reader.read();
+
+        if(done) break;
+
+        const chunk = decoder.decode(value);
+
+        const lines = chunk.split("\n");
+        for (const line of lines){
+          if(!line.startsWith("data:")) continue;
+
+          const data = line.replace("data:","").trim();
+
+          if(data == "[DONE]"){
+            break;
+          }
+          try{
+            const parsed = JSON.parse(data);
+              fullText+=parsed.content;
+              setAnswer(fullText);
+          }catch(error){
+
+          }
+        }
+        
+
+        
+      }
+    
+    
+    
+    
+    }
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+    <h1>Om Sharma's OmGPT</h1>
+    <h1>Enter Prompt</h1>
+    <br />
+    <input type="text" placeholder='Enter Prompt' onChange={(e)=>{setPrompt(e.target.value)}} />
+    <br />
+    <button onClick={handleChat}>Send</button>
+    {answer ?<pre>{answer}</pre> : ""}
     </>
   )
 }
