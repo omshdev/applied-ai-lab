@@ -1,21 +1,18 @@
-import { Ollama } from "ollama";
-import dotenv from "dotenv";
+import express, { type Request, type Response } from 'express';
+import aiRoutes from "./routes/chat.js";
 
-dotenv.config();
-console.log("hh",process.env.OLLAMA_API_KEY)
-const ollama = new Ollama({
-  host: "https://ollama.com",
-  headers: {
-    Authorization: "Bearer " + process.env.OLLAMA_API_KEY,
-  },
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+app.use("/api/v1",aiRoutes);
+
+app.get("/",(req:Request,res:Response)=>{
+res.status(200).json({ msg : "All Good...!"});
+return;
 });
 
-const response = await ollama.chat({
-  model: "gpt-oss:120b",
-  messages: [{ role: "user", content: "Explain quantum computing" }],
-  stream: true,
+app.listen(PORT,()=>{
+  console.log("Server Started at ",PORT);
 });
-
-for await (const part of response) {
-  process.stdout.write(part.message.content);
-}
