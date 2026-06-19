@@ -4,7 +4,7 @@ import { SYSTEM_PROMPT } from "./system_prompt.js";
 
 dotenv.config();
 
-const ollama = new Ollama({
+export const ollama = new Ollama({
   host: "https://ollama.com",
   headers: {
     Authorization: "Bearer " + process.env.OLLAMA_API_KEY,
