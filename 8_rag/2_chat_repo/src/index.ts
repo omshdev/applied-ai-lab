@@ -4,11 +4,12 @@ import { codeChunker } from "./chunkers/code-chunker.js";
 import {runEmbeddingModel} from "./utils/runEmbeddingModel.js"
 import {client,runQdrant} from "./qdrant.js"
 import { searchQuery } from "./search.js";
+import { input, password } from '@inquirer/prompts';
+
 
 
 export function getAllFiles(dir: string): string[] {
   let files: string[] = [];
-
   for (const file of fs.readdirSync(dir)) {
     const fullPath = path.join(dir, file);
 
@@ -107,7 +108,19 @@ const d = getAllFiles(xyz)
 }   
 // runQdrant();
 // main()
-searchQuery("from where the gpt-oss:120b text is written and what is the filename ");
+
+async function runSearch(){
+    while(true){
+        const inputx = await input({ message : "Enter Query about Your Codebase"});
+        searchQuery(inputx);
+    }
+    
+    
+}
+
+runSearch()
+
+
 
 // for better context-window.
 export function splitLargeChunk(
