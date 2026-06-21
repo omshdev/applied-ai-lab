@@ -1,0 +1,15 @@
+import { QdrantClient } from "@qdrant/js-client-rest";
+
+export const client = new QdrantClient({ url: 'http://127.0.0.1:6333',checkCompatibility : false});
+
+export async function runQdrant(){
+    const collection_name = 'repo-chat';
+
+    await client.createCollection(collection_name,{
+        vectors : {
+            size : 768,
+            distance : "Cosine"
+        }
+    })
+    console.log(`Collection "${collection_name}" created.`);
+};
