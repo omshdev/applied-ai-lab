@@ -2,6 +2,7 @@ import {fixedSizeChunker} from "./chunkers/fixed_size_chunker.js"
 import { markdownHeadingChunker } from "./chunkers/markdownHeadingChunker.js";
 import {paragraphChunker} from "./chunkers/paragraph_chunker.js"
 import { client,runQdrant } from "./qdrant.js";
+import { searchQuery } from "./search.js";
 import { fifteen100 } from "./text/1500.js"
 import { markDown } from "./text/markDown.js";
 import { embeddingOllama } from "./utils/ollama.js";
@@ -16,9 +17,10 @@ import { runModel } from "./utils/runModel.js";
 async function main(){
     // first chunk the content using  diffrent chunkers and put them into diffrent collections.
     // 1 . fixed size chunker.
-    const response:any = fixedSizeChunker(fifteen100,500,100);
+    // const response:any = fixedSizeChunker(fifteen100,500,100);
+    const response = paragraphChunker(fifteen100);
 
-    const points = await Promise.all(
+    const points:any = await Promise.all(
         response.map(async(chunk:any,index:number)=>{
             const embedding = await runEmbeddingModel(chunk.content);
              console.log("finalllldwedlweldlwe",embedding.embeddings[0])
@@ -43,3 +45,5 @@ async function main(){
 }   
 // runQdrant();
 // main()
+
+searchQuery("who is William Bronk? ")

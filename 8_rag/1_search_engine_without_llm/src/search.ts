@@ -3,7 +3,7 @@ import { runEmbeddingModel } from "./utils/runEmbeddingModel.js";
 import { runModel } from "./utils/runModel.js";
 
 export async function searchQuery(query : string){
-    
+
     const embedQuery : any= await runEmbeddingModel(query);
     console.log("ember query",embedQuery);
     
@@ -18,7 +18,20 @@ export async function searchQuery(query : string){
         contents += r?.payload?.content;
     });
 
-    const raw = await runModel(`${query} and content is : ${contents}`)
+    // const raw = await runModel(`${query} and content is : ${contents}`)
 
-    console.log("Final Response : ",raw);
+    // console.log("Final Response : ",raw);
+    console.log("Top Results:");
+
+    response.forEach((r, i) => {
+        console.log(`
+        Result ${i + 1}
+        Score: ${r.score}
+        Content:
+        ${r.payload?.content}
+        `);
+    });
+
+    
+
 }

@@ -8,6 +8,6 @@ export async function runModel(prompt : string){
             { role : "user",content : prompt}
         ]
     });
-    console.log(response);        
+    // console.log(response);        
     return response.message.content;
 }
