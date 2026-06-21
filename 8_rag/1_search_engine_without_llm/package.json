@@ -1,0 +1,20 @@
+{
+  "name": "1_search_engine_without_llm",
+  "version": "1.0.0",
+  "description": "Perfect. Since you're already comfortable with Node.js, TypeScript, React, Redis, Qdrant, WebSockets, Docker, and you've built real products before, don't build another generic \"Chat with PDF\".",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev" : "tsc -b && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ollama": "^0.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0"
+  }
+}
