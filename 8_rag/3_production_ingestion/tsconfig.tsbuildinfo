@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/api/route.ts","./src/chunkers/fixed.ts","./src/chunkers/recursive.ts","./src/chunkers/semantic.ts","./src/parsers/html.ts","./src/parsers/markdown.ts","./src/parsers/pdf.ts","./src/queue/bullmq.ts","./src/utils/ollama.ts","./src/utils/runEmbeddingModel.ts","./src/utils/runModel.ts","./src/worker/worker.ts"],"version":"6.0.3"}
