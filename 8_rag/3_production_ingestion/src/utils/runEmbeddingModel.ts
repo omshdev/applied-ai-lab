@@ -6,6 +6,6 @@ export async function runEmbeddingModel(prompt:string){
         model : "nomic-embed-text",
         input : prompt
     });    
-    console.log(embeddings)
+    // console.log(embeddings)
     return embeddings;
 }

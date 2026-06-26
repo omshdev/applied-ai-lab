@@ -4,7 +4,7 @@ type Chunk = {
 };
 
 export function recursiveChunker(
-  text: string,
+  text: any ,
   maxChunkSize = 500
 ): Chunk[] {
   const chunks: Chunk[] = [];

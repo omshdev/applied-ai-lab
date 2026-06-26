@@ -1,6 +1,5 @@
 import express, { type Request, type Response } from "express";
 import dotenv from "dotenv";
-import { run } from "./parsers/pdf.js";
 import { markDownParser } from "./parsers/markdown.js"
 import { parse } from "node-html-parser";
 // import { addJobs } from "./queue/bullmq.js";
